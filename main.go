@@ -2,12 +2,24 @@ package main
 
 import "github.com/gofiber/fiber/v2"
 
+type SomeStruct struct {
+	Name        string
+	Ingredients string
+}
+
 func main() {
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World 👋!")
+	app.Static("/", "./fiber-app/dist")
+
+	app.Get("/api/v1/pizza", func(c *fiber.Ctx) error {
+		data := SomeStruct{
+			Name:        "Garden Party",
+			Ingredients: "Nom nom",
+		}
+
+		return c.JSON(data)
 	})
 
-	app.Listen(":3000")
+	_ = app.Listen(":3000")
 }
